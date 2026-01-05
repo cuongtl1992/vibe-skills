@@ -1,0 +1,17 @@
+{
+  "version": "1.0",
+  "skills": [
+    {
+      "name": "code-reviewer",
+      "stack": "common",
+      "description": "Systematic approach to reviewing code changes for quality, correctness, and maintainability.",
+      "path": "common/code-reviewer/SKILL.md"
+    },
+    {
+      "name": "commit-convention",
+      "stack": "common",
+      "description": "Follow conventional commit format for all git commits.",
+      "path": "common/commit-convention/SKILL.md"
+    }
+  ]
+}

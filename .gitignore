@@ -31,3 +31,4 @@ dist/
 # Local config
 .vibe-skills.yaml
 .claude/
+!cmd/vibe-skills/

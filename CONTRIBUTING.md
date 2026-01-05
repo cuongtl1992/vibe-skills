@@ -28,7 +28,7 @@ skills/
 ### 2. Create the Skill Directory
 
 ```bash
-mkdir -p internal/registry/skills/<stack>/<skill-name>
+mkdir -p skills/<stack>/<skill-name>
 ```
 
 ### 3. Write SKILL.md
@@ -58,7 +58,17 @@ List recommended practices.
 Describe what to avoid.
 ```
 
-### 4. Skill Guidelines
+### 4. Update the Registry
+
+After creating your skill, regenerate the registry index:
+
+```bash
+./scripts/generate-registry.sh
+```
+
+This will automatically update `skills/registry.json` with your new skill.
+
+### 5. Skill Guidelines
 
 - **Be concise**: Claude has limited context, keep skills focused
 - **Be specific**: Provide concrete examples, not abstract concepts
@@ -66,20 +76,23 @@ Describe what to avoid.
 - **Use formatting**: Headers, lists, and code blocks improve readability
 - **Include examples**: Show both good and bad patterns
 
-### 5. Test Locally
+### 6. Test Locally
+
+Since the CLI fetches skills from GitHub, you'll need to push your changes to test with the remote registry. However, you can verify the skill structure:
 
 ```bash
+# Regenerate registry.json
+./scripts/generate-registry.sh
+
+# Verify your skill appears in registry.json
+cat skills/registry.json | grep "<skill-name>"
+
 # Build the CLI
 go build -o vibe-skills ./cmd/vibe-skills
 
-# List skills to verify yours appears
-./vibe-skills list
-
-# Install your skill
-./vibe-skills install <skill-name>
-
-# Verify the skill file
-cat .claude/skills/<skill-name>.md
+# Test with a specific branch (after pushing)
+./vibe-skills list --branch your-feature-branch
+./vibe-skills install <skill-name> --branch your-feature-branch
 ```
 
 ## Submitting Changes
@@ -88,18 +101,17 @@ cat .claude/skills/<skill-name>.md
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feat/my-new-skill`
-3. Make your changes
-4. Test locally
-5. Commit with conventional commits: `git commit -m "feat(skills): add kubernetes deployment skill"`
+3. Create your skill in `skills/<stack>/<skill-name>/SKILL.md`
+4. Run `./scripts/generate-registry.sh` to update registry.json
+5. Commit both the SKILL.md and registry.json changes
 6. Push to your fork
 7. Open a pull request
 
 ### PR Requirements
 
-- [ ] Skill follows the directory structure
+- [ ] Skill is in `skills/<stack>/<skill-name>/SKILL.md`
+- [ ] `skills/registry.json` is updated (run `./scripts/generate-registry.sh`)
 - [ ] SKILL.md is well-formatted
-- [ ] Skill appears in `vibe-skills list`
-- [ ] Skill installs correctly
 - [ ] No breaking changes to existing skills
 
 ### Commit Messages
@@ -143,15 +155,33 @@ vibe-skills/
 ├── cmd/vibe-skills/       # CLI entry point
 ├── internal/
 │   ├── cli/               # Cobra commands
-│   ├── config/            # Config file handling
+│   ├── config/            # Config file handling (.vibe-skills.yaml)
 │   ├── installer/         # Skill installation logic
-│   ├── registry/          # Embedded skills
-│   │   └── skills/        # Skill content (embedded)
+│   ├── registry/          # GitHub registry client & caching
 │   ├── updater/           # Self-update logic
 │   └── version/           # Version info
-├── scripts/               # Installation scripts
-└── docs/                  # Documentation
+├── skills/                # Skill content (fetched from GitHub)
+│   ├── registry.json      # Auto-generated skill index
+│   └── <stack>/<name>/    # Individual skills
+├── scripts/
+│   ├── install.sh         # One-liner installer
+│   └── generate-registry.sh  # Registry generator
+└── .github/workflows/     # CI/CD workflows
 ```
+
+### How the Remote Registry Works
+
+Skills are fetched from GitHub raw content at runtime:
+
+```
+https://raw.githubusercontent.com/cuongtl/vibe-skills/{ref}/skills/registry.json
+https://raw.githubusercontent.com/cuongtl/vibe-skills/{ref}/skills/{stack}/{name}/SKILL.md
+```
+
+The `{ref}` can be a branch, tag, or commit hash. Users can specify it via:
+- CLI flags: `--branch develop` or `--ref v1.0.0`
+- Project config: `.vibe-skills.yaml`
+- Global config: `~/.vibe-skills/config.yaml`
 
 ## Code Style
 

@@ -1,0 +1,85 @@
+name: Update Registry
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'skills/**/*.md'
+      - '!skills/registry.json'
+  workflow_dispatch:
+
+jobs:
+  update-registry:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate registry.json
+        run: |
+          # Create a script to generate registry.json from SKILL.md files
+          cat > generate-registry.sh << 'EOF'
+          #!/bin/bash
+
+          echo '{'
+          echo '  "version": "1.0",'
+          echo '  "skills": ['
+
+          first=true
+          for skill_file in $(find skills -name "SKILL.md" -type f | sort); do
+            # Extract stack and name from path
+            # skills/common/commit-convention/SKILL.md -> stack=common, name=commit-convention
+            path_without_prefix="${skill_file#skills/}"
+            stack=$(echo "$path_without_prefix" | cut -d'/' -f1)
+            name=$(echo "$path_without_prefix" | cut -d'/' -f2)
+
+            # Extract description from first non-empty, non-header line
+            description=$(grep -v '^#' "$skill_file" | grep -v '^$' | head -1 | sed 's/"/\\"/g' | cut -c1-100)
+
+            if [ "$first" = true ]; then
+              first=false
+            else
+              echo ','
+            fi
+
+            printf '    {\n'
+            printf '      "name": "%s",\n' "$name"
+            printf '      "stack": "%s",\n' "$stack"
+            printf '      "description": "%s",\n' "$description"
+            printf '      "path": "%s"\n' "$path_without_prefix"
+            printf '    }'
+          done
+
+          echo ''
+          echo '  ]'
+          echo '}'
+          EOF
+
+          chmod +x generate-registry.sh
+          ./generate-registry.sh > skills/registry.json
+
+          # Pretty print with jq if available
+          if command -v jq &> /dev/null; then
+            jq '.' skills/registry.json > skills/registry.json.tmp && mv skills/registry.json.tmp skills/registry.json
+          fi
+
+          cat skills/registry.json
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          if git diff --quiet skills/registry.json; then
+            echo "No changes to registry.json"
+          else
+            git add skills/registry.json
+            git commit -m "chore: auto-update registry.json"
+            git push
+          fi

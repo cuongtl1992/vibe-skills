@@ -7,7 +7,6 @@ import (
 
 	"github.com/cuongtl/vibe-skills/internal/config"
 	"github.com/cuongtl/vibe-skills/internal/installer"
-	"github.com/cuongtl/vibe-skills/internal/registry"
 	"github.com/spf13/cobra"
 )
 
@@ -45,10 +44,12 @@ func runInstall(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to get current directory: %w", err)
 	}
 
-	reg, err := registry.New()
+	reg, err := getRegistry()
 	if err != nil {
-		return fmt.Errorf("failed to load skills registry: %w", err)
+		return fmt.Errorf("failed to create registry: %w", err)
 	}
+
+	fmt.Printf("Using registry: %s\n\n", reg.GetRef())
 
 	inst := installer.New(reg, cwd)
 

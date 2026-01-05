@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/cuongtl/vibe-skills/internal/installer"
-	"github.com/cuongtl/vibe-skills/internal/registry"
 	"github.com/spf13/cobra"
 )
 
@@ -28,9 +27,9 @@ func runRemove(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to get current directory: %w", err)
 	}
 
-	reg, err := registry.New()
+	reg, err := getRegistry()
 	if err != nil {
-		return fmt.Errorf("failed to load skills registry: %w", err)
+		return fmt.Errorf("failed to create registry: %w", err)
 	}
 
 	inst := installer.New(reg, cwd)

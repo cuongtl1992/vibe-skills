@@ -10,25 +10,33 @@ import (
 
 const TargetDir = ".claude/skills"
 
+// SkillProvider defines the interface for skill sources
+type SkillProvider interface {
+	Find(name string) (*registry.Skill, error)
+	List() ([]registry.Skill, error)
+	ListByStack(stack string) ([]registry.Skill, error)
+	GetContent(skill *registry.Skill) ([]byte, error)
+}
+
 type Installer struct {
-	registry *registry.Registry
+	provider SkillProvider
 	baseDir  string
 }
 
-func New(reg *registry.Registry, baseDir string) *Installer {
+func New(provider SkillProvider, baseDir string) *Installer {
 	return &Installer{
-		registry: reg,
+		provider: provider,
 		baseDir:  baseDir,
 	}
 }
 
 func (i *Installer) Install(skillName string) error {
-	skill := i.registry.Find(skillName)
-	if skill == nil {
+	skill, err := i.provider.Find(skillName)
+	if err != nil {
 		return fmt.Errorf("skill not found: %s", skillName)
 	}
 
-	content, err := i.registry.GetContent(skill)
+	content, err := i.provider.GetContent(skill)
 	if err != nil {
 		return fmt.Errorf("failed to read skill content: %w", err)
 	}
@@ -51,7 +59,7 @@ func (i *Installer) Install(skillName string) error {
 func (i *Installer) InstallMultiple(skillNames []string) (installed []string, errors []error) {
 	for _, name := range skillNames {
 		if err := i.Install(name); err != nil {
-			errors = append(errors, err)
+			errors = append(errors, fmt.Errorf("%s: %w", name, err))
 		} else {
 			installed = append(installed, name)
 		}
@@ -60,7 +68,11 @@ func (i *Installer) InstallMultiple(skillNames []string) (installed []string, er
 }
 
 func (i *Installer) InstallStack(stack string) (installed []string, errors []error) {
-	skills := i.registry.ListByStack(stack)
+	skills, err := i.provider.ListByStack(stack)
+	if err != nil {
+		errors = append(errors, fmt.Errorf("failed to list stack %s: %w", stack, err))
+		return
+	}
 	if len(skills) == 0 {
 		errors = append(errors, fmt.Errorf("no skills found in stack: %s", stack))
 		return
@@ -77,7 +89,12 @@ func (i *Installer) InstallStack(stack string) (installed []string, errors []err
 }
 
 func (i *Installer) InstallAll() (installed []string, errors []error) {
-	skills := i.registry.List()
+	skills, err := i.provider.List()
+	if err != nil {
+		errors = append(errors, fmt.Errorf("failed to list skills: %w", err))
+		return
+	}
+
 	for _, skill := range skills {
 		if err := i.Install(skill.Name); err != nil {
 			errors = append(errors, err)

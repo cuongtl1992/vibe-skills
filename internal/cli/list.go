@@ -23,9 +23,10 @@ var listCmd = &cobra.Command{
 	Long: `List all available skills or filter by stack.
 
 Examples:
-  vibe-skills list                  # List all available skills
-  vibe-skills list --stack dotnet   # List skills in dotnet stack
-  vibe-skills list --installed      # List installed skills only`,
+  vibe-skills list                    # List all available skills
+  vibe-skills list --stack dotnet     # List skills in dotnet stack
+  vibe-skills list --installed        # List installed skills only
+  vibe-skills list --branch develop   # List skills from develop branch`,
 	RunE: runList,
 }
 
@@ -40,9 +41,9 @@ func runList(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to get current directory: %w", err)
 	}
 
-	reg, err := registry.New()
+	reg, err := getRegistry()
 	if err != nil {
-		return fmt.Errorf("failed to load skills registry: %w", err)
+		return fmt.Errorf("failed to create registry: %w", err)
 	}
 
 	inst := installer.New(reg, cwd)
@@ -67,17 +68,26 @@ func runList(cmd *cobra.Command, args []string) error {
 
 	var skills []registry.Skill
 	if listStack != "" {
-		skills = reg.ListByStack(listStack)
+		skills, err = reg.ListByStack(listStack)
+		if err != nil {
+			return fmt.Errorf("failed to list skills: %w", err)
+		}
 		if len(skills) == 0 {
 			fmt.Printf("No skills found in stack: %s\n", listStack)
-			fmt.Println("\nAvailable stacks:")
-			for _, stack := range reg.GetStacks() {
-				fmt.Printf("  %s\n", stack)
+			stacks, _ := reg.GetStacks()
+			if len(stacks) > 0 {
+				fmt.Println("\nAvailable stacks:")
+				for _, stack := range stacks {
+					fmt.Printf("  %s\n", stack)
+				}
 			}
 			return nil
 		}
 	} else {
-		skills = reg.List()
+		skills, err = reg.List()
+		if err != nil {
+			return fmt.Errorf("failed to list skills: %w", err)
+		}
 	}
 
 	if len(skills) == 0 {
@@ -97,6 +107,9 @@ func runList(cmd *cobra.Command, args []string) error {
 		stacks = append(stacks, stack)
 	}
 	sort.Strings(stacks)
+
+	// Print header with registry info
+	fmt.Printf("Registry: %s\n", reg.GetRef())
 
 	// Print grouped skills
 	for _, stack := range stacks {
