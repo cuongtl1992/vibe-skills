@@ -41,6 +41,7 @@ func init() {
 	rootCmd.AddCommand(removeCmd)
 	rootCmd.AddCommand(listCmd)
 	rootCmd.AddCommand(searchCmd)
+	rootCmd.AddCommand(updateCmd)
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(selfUpdateCmd)
 }

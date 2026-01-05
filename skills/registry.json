@@ -4,14 +4,16 @@
     {
       "name": "code-reviewer",
       "stack": "common",
-      "description": "---",
-      "path": "common/code-reviewer/SKILL.md"
+      "description": "Systematic code review for quality, correctness, and maintainability. Use when reviewing pull requests, code changes, diffs, or when asked to review/critique code. Covers functionality, architecture, ",
+      "path": "common/code-reviewer/SKILL.md",
+      "files": ["SKILL.md", "references/checklists.md"]
     },
     {
       "name": "sqlserver-expert",
       "stack": "database",
-      "description": "---",
-      "path": "database/sqlserver-expert/SKILL.md"
+      "description": "Expert in Microsoft SQL Server development and administration. Use when writing T-SQL queries, stored procedures, optimizing database performance (deadlocks, slow queries, execution plans), designing ",
+      "path": "database/sqlserver-expert/SKILL.md",
+      "files": ["SKILL.md", "references/cdc.md", "references/dotnet-integration.md", "references/performance.md", "references/system-queries.md", "references/tsql-advanced.md"]
     }
   ]
 }
