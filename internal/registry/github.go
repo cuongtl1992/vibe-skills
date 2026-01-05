@@ -176,7 +176,8 @@ func (g *GitHubRegistry) fetchIndex() (*RegistryIndex, error) {
 		return nil, fmt.Errorf("failed to parse registry: %w", err)
 	}
 
-	// Cache the result
+	// Cache the result (best-effort, ignore error)
+	//nolint:errcheck
 	g.cache.Set(g.ref, &index)
 
 	return &index, nil
@@ -193,7 +194,7 @@ func (g *GitHubRegistry) fetch(url string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode == http.StatusNotFound {
 		return nil, fmt.Errorf("not found: %s", url)

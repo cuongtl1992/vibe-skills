@@ -72,7 +72,7 @@ func SelfUpdate() error {
 	if err != nil {
 		return fmt.Errorf("failed to download update: %w", err)
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf("failed to download update: HTTP %d", resp.StatusCode)
@@ -89,13 +89,13 @@ func SelfUpdate() error {
 	if err != nil {
 		return fmt.Errorf("failed to create temp file: %w", err)
 	}
-	defer os.Remove(tmpFile.Name())
+	defer func() { _ = os.Remove(tmpFile.Name()) }()
 
 	// Write downloaded content
 	if _, err := io.Copy(tmpFile, resp.Body); err != nil {
 		return fmt.Errorf("failed to write update: %w", err)
 	}
-	tmpFile.Close()
+	_ = tmpFile.Close()
 
 	// Make executable
 	if err := os.Chmod(tmpFile.Name(), 0755); err != nil {
@@ -117,7 +117,7 @@ func getLatestRelease() (*Release, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("failed to get release info: HTTP %d", resp.StatusCode)

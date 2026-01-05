@@ -76,7 +76,7 @@ func runInstall(cmd *cobra.Command, args []string) error {
 		// Install from config file
 		cfg, err := config.Load(cwd)
 		if err != nil {
-			return fmt.Errorf("no skills specified and no config file found.\nRun 'vibe-skills init' to create a config file, or specify skills to install.")
+			return fmt.Errorf("no skills specified and no config file found: run 'vibe-skills init' to create a config file, or specify skills to install")
 		}
 		installed, errors = inst.InstallMultiple(cfg.Skills)
 	}
