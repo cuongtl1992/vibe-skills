@@ -2,6 +2,13 @@
   "version": "1.0",
   "skills": [
     {
+      "name": "bdd-practices",
+      "stack": "common",
+      "description": "Cucumber/Gherkin BDD best practices guidance skill, providing Gherkin writing standards, scenario design principles, Discovery Workshop facilitation, and common anti-pattern identification to help tea",
+      "path": "common/bdd-practices/SKILL.md",
+      "files": []
+    },
+    {
       "name": "code-reviewer",
       "stack": "common",
       "description": "Systematic code review for quality, correctness, and maintainability. Use when reviewing pull requests, code changes, diffs, or when asked to review/critique code. Covers functionality, architecture, ",
