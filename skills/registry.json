@@ -18,7 +18,7 @@
     {
       "name": "playwright-bdd-analyzer",
       "stack": "testing",
-      "description": "",
+      "description": "|",
       "path": "testing/playwright-bdd-analyzer/SKILL.md",
       "files": ["SKILL.md", "references/analysis-rules.md", "references/improvement-patterns.md", "references/quality-metrics.md", "scripts/analyze-features.ts", "scripts/check-step-coverage.ts", "scripts/detect-flaky-patterns.ts"]
     }
