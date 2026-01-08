@@ -28,6 +28,13 @@
       "description": "BDD test quality analyzer - detects flaky patterns, coverage gaps, and maintainability issues in Playwright-BDD/Cucumber tests",
       "path": "testing/playwright-bdd-analyzer/SKILL.md",
       "files": ["SKILL.md", "references/analysis-rules.md", "references/improvement-patterns.md", "references/quality-metrics.md", "scripts/analyze-features.ts", "scripts/check-step-coverage.ts", "scripts/detect-flaky-patterns.ts"]
+    },
+    {
+      "name": "pom-generator",
+      "stack": "testing",
+      "description": "Interactive Page Object Model generator using Playwright MCP - navigates to web pages, analyzes HTML structure, and generates TypeScript POM classes with BasePage pattern.",
+      "path": "testing/pom-generator/SKILL.md",
+      "files": ["SKILL.md", "references/base-page-template.md", "references/pom-patterns.md", "references/selector-strategies.md"]
     }
   ]
 }
