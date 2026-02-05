@@ -13,7 +13,7 @@
       "stack": "common",
       "description": "Systematic code review for quality, correctness, and maintainability. Use when reviewing pull requests, code changes, diffs, or when asked to review/critique code. Covers functionality, architecture, ",
       "path": "common/code-reviewer/SKILL.md",
-      "files": ["SKILL.md", "references/common_checklists.md", "references/flutter_dart_checklist.md"]
+      "files": ["SKILL.md", "references/android_checklists.md", "references/common_checklists.md", "references/flutter_dart_checklist.md"]
     },
     {
       "name": "sqlserver-expert",
