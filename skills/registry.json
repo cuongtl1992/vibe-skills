@@ -23,6 +23,13 @@
       "files": ["SKILL.md", "references/cdc.md", "references/dotnet-integration.md", "references/performance.md", "references/system-queries.md", "references/tsql-advanced.md"]
     },
     {
+      "name": "kat-flutter-code-reviewer",
+      "stack": "kat",
+      "description": "Systematic code review for Flutter applications following KAT team standards. Use when reviewing pull requests, code changes, diffs, or when asked to review/critique Flutter/Dart code. Covers function",
+      "path": "kat/kat-flutter-code-reviewer/SKILL.md",
+      "files": ["SKILL.md", "references/architecture_rules.md", "references/common_checklist.md", "references/dart_ai_rules.md", "references/flutter_ai_rules.md", "references/request_code_review_template.md"]
+    },
+    {
       "name": "playwright-bdd-analyzer",
       "stack": "testing",
       "description": "BDD test quality analyzer - detects flaky patterns, coverage gaps, and maintainability issues in Playwright-BDD/Cucumber tests",
