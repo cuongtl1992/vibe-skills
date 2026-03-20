@@ -107,6 +107,13 @@
       "files": ["SKILL.md", "references/component-testing.md", "references/state-service-testing.md", "references/usecase-testing.md"]
     },
     {
+      "name": "project-management",
+      "stack": "management",
+      "description": ">",
+      "path": "management/project-management/SKILL.md",
+      "files": ["SKILL.md", "references/agile-frameworks.md", "references/atlassian-mcp.md"]
+    },
+    {
       "name": "prd-to-gherkin",
       "stack": "product",
       "description": "Convert PRD / feature spec documents into Gherkin .feature files. Use when the user has a PRD, feature spec, user story, or requirements document (in any format — Anthropic feature-spec, Confluence,",
