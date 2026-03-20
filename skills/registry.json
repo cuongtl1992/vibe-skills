@@ -147,6 +147,13 @@
       "description": "Interactive Page Object Model generator using Playwright MCP - navigates to web pages, analyzes HTML structure, and generates TypeScript POM classes with BasePage pattern.",
       "path": "testing/pom-generator/SKILL.md",
       "files": ["SKILL.md", "references/base-page-template.md", "references/pom-patterns.md", "references/selector-strategies.md"]
+    },
+    {
+      "name": "flutter-tdd",
+      "stack": "flutter",
+      "description": "Flutter TDD workflow with codebase exploration and Figma design integration. Guides the Explore-Plan-Test-Implement-Refactor-Review cycle for any Flutter application. Use when implementing Flutter features test-first, \"TDD\", \"Red-Green-Refactor\", developing UI from Figma designs, or when user says \"write tests first\".",
+      "path": "flutter/flutter-tdd/SKILL.md",
+      "files": ["SKILL.md", "references/exploration-checklist.md", "references/figma-workflow.md", "references/tdd-patterns.md"]
     }
   ]
 }
